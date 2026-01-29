@@ -1,0 +1,31 @@
+# Load libraries
+library(ggplot2)
+library(forecast)
+df <- read.csv("dataset.csv")
+df$Date <- as.Date(df$Date, format="%d-%m-%Y")
+# 23.LINE PLOT
+ggplot(df, aes(x=Date, y=Value)) +
+  geom_line() +
+  geom_point() +
+  labs(title="Line Plot: Trend of Value over Time")
+# 24.MULTIPLE LINE PLOT
+# Compare multiple time series by Category
+ggplot(df, aes(x=Date, y=Value, color=Category)) +
+  geom_line() +
+  geom_point() +
+  labs(title="Multiple Line Plot: Value over Time by Category")
+# 25.DOSE–RESPONSE CURVE
+ggplot(df, aes(x=Value, y=Value2)) +
+  geom_line() +
+  geom_point() +
+  labs(title="Dose–Response Curve: Value vs Value2")
+# 26.SEASONAL DECOMPOSITION (STL)
+value_ts <- ts(df$Value, frequency=2)
+stl_result <- stl(value_ts, s.window="periodic")
+plot(stl_result)
+# 27.SMOOTHING / MOVING AVERAGE
+ggplot(df, aes(x=Date, y=Value)) +
+  geom_line() +
+  geom_smooth(method="loess") +
+  labs(title="Smoothed Trend using LOESS")
+
