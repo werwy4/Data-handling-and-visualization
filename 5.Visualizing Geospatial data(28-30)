@@ -1,0 +1,27 @@
+# Load libraries
+library(ggplot2)
+library(rgl)
+library(leaflet)
+
+# Read dataset
+df <- read.csv("dataset.csv")
+
+# 28.SPATIAL HEATMAP (DENSITY)
+ggplot(df, aes(x=Longitude, y=Latitude)) +
+  stat_density2d(aes(fill=..level..), geom="polygon") +
+  labs(title="Spatial Heatmap of Data Points")
+
+# 29.3D GEOSPATIAL PLOT
+plot3d(df$Longitude, df$Latitude, df$Value,
+       col="blue", size=5,
+       xlab="Longitude", ylab="Latitude", zlab="Value")
+
+# 30.INTERACTIVE MAP
+leaflet(df) %>%
+  addTiles() %>%
+  addCircles(lng=~Longitude,
+             lat=~Latitude,
+             weight=1,
+             radius=~Value*50,
+             popup=~paste("Category:", Category,
+                          "<br>Value:", Value))
