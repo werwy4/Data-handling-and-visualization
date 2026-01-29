@@ -1,0 +1,43 @@
+# Load libraries
+library(ggplot2)
+library(hexbin)
+library(corrplot)
+library(igraph)
+library(ggfortify)
+
+# Read dataset
+df <- read.csv("dataset.csv")
+# 17.SCATTERPLOT
+# Relationship between Value and Value2
+ggplot(df, aes(x=Value, y=Value2)) +
+  geom_point(size=3) +
+  labs(title="Scatterplot: Value vs Value2")
+
+#18. BUBBLE CHART
+ggplot(df, aes(x=Value, y=Value2, size=Freq)) +
+  geom_point(alpha=0.6) +
+  labs(title="Bubble Chart: Value vs Value2 with Frequency")
+
+#19. HEXBIN PLOT
+ggplot(df, aes(x=Value, y=Value2)) +
+  geom_hex() +
+  labs(title="Hexbin Plot: Density of Value vs Value2")
+
+#20. CORRELOGRAM
+numeric_data <- df[, c("Value", "Value2", "Freq", "Latitude", "Longitude")]
+cor_matrix <- cor(numeric_data)
+corrplot(cor_matrix, method="circle")
+
+#21. NETWORK GRAPH
+edges <- data.frame(
+  from = df$Category,
+  to   = df$Subcategory
+)
+
+graph <- graph_from_data_frame(edges)
+plot(graph, main="Network Graph: Category–Subcategory Relationship")
+
+#22. PCA (Dimensionality Reduction)
+pca_data <- prcomp(numeric_data, scale.=TRUE)
+autoplot(pca_data, data=df, colour="Category") +
+  labs(title="PCA Plot: Dimensionality Reduction")
