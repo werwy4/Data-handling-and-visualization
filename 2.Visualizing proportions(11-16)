@@ -1,0 +1,71 @@
+# Load libraries
+library(ggplot2)
+library(treemapify)
+library(sunburstR)
+library(ggalluvial)
+library(networkD3)
+
+# Read dataset
+df <- read.csv("dataset.csv")
+
+# 11. PIE CHART
+ggplot(df, aes(x="", y=Value, fill=Category)) +
+  geom_bar(stat="identity") +
+  coord_polar("y") +
+  labs(title="Pie Chart: Category-wise Proportion")
+
+
+#12.STACKED BAR CHART
+ggplot(df, aes(x=Category, y=Value, fill=Subcategory)) +
+  geom_bar(stat="identity") +
+  labs(title="Stacked Bar Chart: Category vs Subcategory")
+
+# 13.TREEMAP
+
+ggplot(df, aes(area=Value, fill=Category, label=Category)) +
+  geom_treemap() +
+  geom_treemap_text(colour="white", place="centre") +
+  labs(title="Treemap: Hierarchical Proportions")
+
+#14. SUNBURST CHART
+
+sunburst_data <- data.frame(
+  sequence = paste(df$Category, df$Subcategory, sep="-"),
+  count = df$Value
+)
+sunburst(sunburst_data)
+
+#15.PARALLEL SETS
+
+ggplot(df,
+       aes(axis1 = Category,
+           axis2 = Subcategory,
+           y = Freq)) +
+  geom_alluvium(aes(fill = Category)) +
+  geom_stratum() +
+  geom_text(stat="stratum", aes(label = after_stat(stratum))) +
+  scale_x_discrete(limits = c("Category", "Subcategory")) +
+  labs(title="Parallel Sets: Category to Subcategory")
+
+# 16.SANKEY DIAGRAM
+
+nodes <- data.frame(
+  name = unique(c(as.character(df$Category),
+                  as.character(df$Subcategory)))
+)
+
+links <- data.frame(
+  source = match(df$Category, nodes$name) - 1,
+  target = match(df$Subcategory, nodes$name) - 1,
+  value  = df$Freq
+)
+
+sankeyNetwork(
+  Links = links,
+  Nodes = nodes,
+  Source = "source",
+  Target = "target",
+  Value = "value",
+  NodeID = "name",
+  fontSize = 12
+)
