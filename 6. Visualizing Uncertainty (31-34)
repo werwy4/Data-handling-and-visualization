@@ -1,0 +1,39 @@
+SOURCE CODE (MERGED – ALL PLOTS)
+# Load libraries
+library(ggplot2)
+
+# Read dataset
+df <- read.csv("dataset.csv")
+
+# 31.CONFIDENCE INTERVAL PLOT
+
+ggplot(df, aes(x=Category, y=Value)) +
+  geom_point() +
+  geom_errorbar(aes(ymin=Lower, ymax=Upper), width=0.2) +
+  labs(title="Confidence Interval Plot")
+
+
+#32. BOOTSTRAPPING / HYPOTHETICAL OUTCOMES
+set.seed(123)
+df_boot <- data.frame(
+  Value = sample(df$Value, 1000, replace=TRUE)
+)
+
+ggplot(df_boot, aes(x=Value)) +
+  geom_density(alpha=0.3) +
+  labs(title="Bootstrapped Density Plot")
+  
+# 33.PARTIAL TRANSPARENCY & JITTER
+ggplot(df, aes(x=Value, y=Value2)) +
+  geom_point(alpha=0.5,
+             position=position_jitter(width=0.5)) +
+  labs(title="Jittered Scatter Plot")
+
+# 34. 2D HISTOGRAM / DENSITY
+ggplot(df, aes(x=Value, y=Value2)) +
+  geom_bin2d() +
+  labs(title="2D Histogram")
+
+ggplot(df, aes(x=Value, y=Value2)) +
+  geom_density_2d() +
+  labs(title="2D Density Contour Plot")
