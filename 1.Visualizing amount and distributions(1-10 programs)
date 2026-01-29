@@ -1,0 +1,52 @@
+source code:
+
+setwd("S:/DHV")
+getwd()
+df=read.csv("common_dataset.csv")
+df
+install.packages("ggridges")
+library(ggplot2)
+library(ggridges)
+df$Date <- as.Date(df$Date)
+
+# 1.Bar Plot
+ggplot(df, aes(x=Category, y=Value)) +
+  geom_bar(stat="identity")
+
+# 2.Grouped Bar Plot
+ggplot(df, aes(x=Category, y=Value, fill=Subcategory)) +
+  geom_bar(stat="identity", position="dodge")
+
+# 3.Stacked Bar Plot
+ggplot(df, aes(x=Category, y=Value, fill=Subcategory)) +
+  geom_bar(stat="identity")
+
+# 4.Dot Plot
+ggplot(df, aes(x=Value, y=Category)) +
+  geom_point()
+
+# 5.Heatmap
+ggplot(df, aes(x=Category, y=Subcategory, fill=Value)) +
+  geom_tile()
+
+# 6.Violin Plot
+ggplot(df, aes(x=Category, y=Value)) +
+  geom_violin()
+
+# 7.Ridgeline Plot
+ggplot(df, aes(x=Value, y=Category)) +
+  geom_density_ridges()
+
+# 8.Histogram
+ggplot(df, aes(x=Value)) +
+  geom_histogram(binwidth=5)
+
+# 9.Density Plot
+ggplot(df, aes(x=Value)) +
+  geom_density()
+
+# 10.Boxplot
+ggplot(df, aes(x=Category, y=Value)) +
+  geom_boxplot()
+
+
